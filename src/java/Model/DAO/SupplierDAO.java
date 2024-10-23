@@ -66,7 +66,7 @@ public class SupplierDAO {
             throw new Exception(ErrorMessage.SUPPLIER_NOT_EXISTS.enumToString());
         }
         return supplierRS;
-    }//end getSupplierBySupplierID
+    }
 
     public Supplier getSupplierByCompanyName(String searchCompanyName) throws Exception {
         //1.lấy data từ db
@@ -90,7 +90,7 @@ public class SupplierDAO {
             throw new Exception(ErrorMessage.SUPPLIER_NOT_EXISTS.enumToString());
         }
         return supplierRS;
-    }//end getSupplierByCompanyName
+    }
 
     //add thành công trả lại thằng vừa add không thì null hoặc thrown lỗi
     public Supplier addSupplier(Supplier supplierToAdd) throws Exception {
@@ -104,110 +104,79 @@ public class SupplierDAO {
         //2.add vô db
         Connection cn = DBConnection.getConnection();
         int af = 0;
-        String sql = "INSERT dbo.Account(AccountID, UserName, Password, FullName, Type, Status)" + "VALUES (\n"
-                + "? ," //-- AccountID - nvarchar(30)\n"
-                + "? ," //-- UserName - nvarchar(30)\n"
-                + "? ," //-- Password - nvarchar(50)\n"
-                + "? ," //-- FullName - nvarchar(50)\n"
-                + "? ," //-- Type - nvarchar(50)\n"
-                + "? ," //-- Status - nvarchar(30)\n"
+        String sql = "INSERT dbo.Supplier(SupplierID, CompanyName, Address, Phone, Status)" + "VALUES (\n"
+                + "? ," //-- SupplierID - nvarchar(30)\n"
+                + "? ," //-- CompanyName - nvarchar(30)\n"
+                + "? ," //-- Address - nvarchar(50)\n"
+                + "? ," //-- Phone - nvarchar(50)\n"
+                + "? ," //-- Status - nvarchar(50)\n"
                 + ");";
-        af = DBConnection.getAffectedRowsFromUpdate(cn, sql, supplierToAdd.getAccountID(), supplierToAdd.getUserName(), supplierToAdd.getPassword(), supplierToAdd.getFullName(), supplierToAdd.getType(), supplierToAdd.getStatus()); //truyền đúng tham số theo sql ko là đi
+        af = DBConnection.getAffectedRowsFromUpdate(cn, sql, supplierToAdd.getSupplierID(), supplierToAdd.getCompanyName(), supplierToAdd.getCompanyName(), supplierToAdd.getAddress(), supplierToAdd.getPhone(), supplierToAdd.getStatus()); //truyền đúng tham số theo sql ko là đi
         cn.close();
         return (af > 0) ? supplierToAdd : null; // thành công trả chính nó, ko thì null
-    }//end addAccount
+    }
 
     //update thành công trả lại thằng vừa update không thì null hoặc thrown lỗi
-    public Account updateAcccount(Account accountToUpdate) throws Exception {
+    public Supplier updateSupplier(Supplier supplierToUpdate) throws Exception {
         Connection cn = DBConnection.getConnection();
         //1.kiểm tra có tồn tại chưa
-        Account tmpAccount = this.getSupplierBySupplierID(accountToUpdate.getAccountID()); //thật ra có thể viết sql để tránh 2 lần connection gọi
-        if (tmpAccount != null) {
-            throw new Exception(ErrorMessage.ACCOUNT_NOT_EXISTS.enumToString());
+        Supplier tmpSupplier = this.getSupplierBySupplierID(supplierToUpdate.getSupplierID()); //thật ra có thể viết sql để tránh 2 lần connection gọi
+        if (tmpSupplier != null) {
+            throw new Exception(ErrorMessage.SUPPLIER_NOT_EXISTS.enumToString());
         }
         //GIỮ LẠI THUỘC TÍNH GÌ CŨ THÌ LẤY LẠI TMP USER XÀI
 
         //2.update vô db
         int af = 0;
-        String sql = "UPDATE dbo.Account SET [AccountID]=?,[UserName]=?,[Password]=?,[FullName]=?,[Type]=?,[Status]=? WHERE AccountID=?"; //CHÚ Ý CÁI WHERE LÀ CÁI CUỐI
-        af = DBConnection.getAffectedRowsFromUpdate(cn, sql, accountToUpdate.getAccountID(), accountToUpdate.getUserName(), accountToUpdate.getPassword(), accountToUpdate.getFullName(), accountToUpdate.getType(), accountToUpdate.getStatus(), accountToUpdate.getAccountID()); //truyền đúng tham số theo sql ko là đi
+        String sql = "UPDATE dbo.Supplier SET [SupplierID]=?,[CompanyName]=?,[Address]=?,[Phone]=?,[Status]=? WHERE SupplierID=?"; //CHÚ Ý CÁI WHERE LÀ CÁI CUỐI
+        af = DBConnection.getAffectedRowsFromUpdate(cn, sql, supplierToUpdate.getSupplierID(), supplierToUpdate.getCompanyName(), supplierToUpdate.getAddress(), supplierToUpdate.getPhone(), supplierToUpdate.getStatus(), supplierToUpdate.getSupplierID()); //truyền đúng tham số theo sql ko là đi
         cn.close();
-        return (af > 0) ? accountToUpdate : null; // thành công trả chính nó, ko thì null
-    }//end update
+        return (af > 0) ? supplierToUpdate : null; // thành công trả chính nó, ko thì null
+    }
 
     //delete thành công trả lại thằng vừa delete không thì null hoặc thrown lỗi
-    public Account deleteAccountByAccountId(String idToDelete) throws Exception {
+    public Supplier deleteSupplierBySupplierId(String idToDelete) throws Exception {
         Connection cn = DBConnection.getConnection();
         //1.kiểm tra có tồn tại chưa
-        Account tmpAccount = this.getSupplierBySupplierID(idToDelete); //thật ra có thể viết sql để tránh 2 lần connection gọi
-        if (tmpAccount != null) {
-            throw new Exception(ErrorMessage.ACCOUNT_NOT_EXISTS.enumToString());
+        Supplier tmpSupplier = this.getSupplierBySupplierID(idToDelete); //thật ra có thể viết sql để tránh 2 lần connection gọi
+        if (tmpSupplier != null) {
+            throw new Exception(ErrorMessage.SUPPLIER_NOT_EXISTS.enumToString());
         }
         //GIỮ LẠI THUỘC TÍNH GÌ CŨ THÌ LẤY LẠI TMP USER XÀI
 
         //2.update vô db
         int af = 0;
         String statusMessageDisable = DBMessage.DISSABLED.enumToString();
-        String sql = "UPDATE dbo.Account SET [AccountID]=?,[UserName]=?,[Password]=?,[FullName]=?,[Type]=?,[Status]=? WHERE AccountID=?"; //CHÚ Ý CÁI WHERE LÀ CÁI CUỐI
-        af = DBConnection.getAffectedRowsFromUpdate(cn, sql, tmpAccount.getAccountID(), tmpAccount.getUserName(), tmpAccount.getPassword(), tmpAccount.getFullName(), tmpAccount.getType(), statusMessageDisable, tmpAccount.getAccountID()); //truyền đúng tham số theo sql ko là đi
+        String sql = "UPDATE dbo.Supplier SET [SupplierID]=?,[CompanyName]=?,[Address]=?,[Phone]=?,[Status]=? WHERE SupplierID=?"; //CHÚ Ý CÁI WHERE LÀ CÁI CUỐI
+        af = DBConnection.getAffectedRowsFromUpdate(cn, sql, tmpSupplier.getSupplierID(), tmpSupplier.getCompanyName(), tmpSupplier.getAddress(), tmpSupplier.getPhone(), statusMessageDisable, tmpSupplier.getSupplierID()); //truyền đúng tham số theo sql ko là đi
         cn.close();
-        return (af > 0) ? tmpAccount : null; // thành công trả chính nó, ko thì null
-    }//end deleteAccountByAccountId
+        return (af > 0) ? tmpSupplier : null; // thành công trả chính nó, ko thì null
+    }
 
-    public Account login(String userNameInp, String passwordInp) throws Exception {
-        //0.kiểm tra userName có tồn tại chưa
-        Account tmpAccount = this.getAccountByUserName(userNameInp);
-        if (tmpAccount == null) {
-            //throw new Exception(ErrorMessage.USERNAME_NOT_EXISTS.enumToString()); -hàm getUserByUserName quăng rồi
-        }
-        //1.lấy data từ db
-        Connection cn = DBConnection.getConnection();
-        ResultSet rs = null;
-        String sql = "SELECT AccountID,UserName,Password,FullName,Type,Status FROM dbo.Account WHERE [UserName]=? AND [Password]=?";
-        rs = DBConnection.getResultSetFromQuery(cn, sql, userNameInp, passwordInp); //truyền đúng tham số theo sql ko là đi
-        //2.parse/map result
-        Account accountRS = null;
-        if (rs != null && rs.next()) {
-            String accountID = rs.getString(1); //theo lấy 1 2 theo đúng sql
-            String userName = rs.getString(2);
-            String password = rs.getString(3);
-            String fullName = rs.getString(4);
-            String type = rs.getString(5);
-            String status = rs.getString(6);
-            accountRS = new Account(accountID, userName, password, fullName, type, status);
-            rs.close();
-        }
-        cn.close();
-        if (accountRS == null) {
-            throw new Exception(ErrorMessage.USERNAME_OR_PASSWORD_INCORRECT.enumToString());
-        }
-        return accountRS;
-    }//end login
-
-    public ArrayList<Account> searchAccountFullName(String searchValue) throws Exception {
+    public ArrayList<Supplier> searchSupplierCompanyName(String searchValue) throws Exception {
         //data
-        ArrayList<Account> accountListHasFound = new ArrayList<>();
+        ArrayList<Supplier> supplierListHasFound = new ArrayList<>();
 
         //1.lấy data từ db
         Connection cn = DBConnection.getConnection();
         ResultSet rs = null;
-        String sql = "SELECT AccountID,UserName,Password,FullName,Type,Status FROM dbo.Account WHERE [FullName] LIKE ?";
+        String sql = "SELECT SupplierID,CompanyName,Address,Phone,Status FROM dbo.Supplier WHERE [CompanyName] LIKE ?";
         rs = DBConnection.getResultSetFromQuery(cn, sql, searchValue); //truyền đúng tham số theo sql ko là đi
+
         //2.parse/map result
-        Account accountRS = null;
+        Supplier supplierRS = null;
         if (rs != null && rs.next()) {
-            String accountID = rs.getString(1); //theo lấy 1 2 theo đúng sql
-            String userName = rs.getString(2);
-            String password = rs.getString(3);
-            String fullName = rs.getString(4);
-            String type = rs.getString(5);
-            String status = rs.getString(6);
-            accountRS = new Account(accountID, userName, password, fullName, type, status);
-            accountListHasFound.add(accountRS);
+            String supplierID = rs.getString(1); //theo lấy 1 2 theo đúng sql
+            String companyName = rs.getString(2);
+            String address = rs.getString(3);
+            String phone = rs.getString(4);
+            String status = rs.getString(5);
+            supplierRS = new Supplier(supplierID, companyName, address, phone, status);
             rs.close();
         }
         cn.close();
-        return (accountListHasFound.isEmpty() == true) ? null : accountListHasFound;
-    }//end searchAccountFullName
+        supplierListHasFound.add(supplierRS);
+        return (supplierListHasFound.isEmpty() == true) ? null : supplierListHasFound;
+    }
 
 }
