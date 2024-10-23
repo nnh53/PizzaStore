@@ -3,8 +3,8 @@ package Controller.Authentication;
 import Constant.ErrorMessage;
 import Constant.RouteController;
 import Constant.RoutePage;
-import Model.DAO.UserDAO;
-import Model.DTO.User;
+import Model.DAO.AccountDAO;
+import Model.DTO.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -42,11 +42,11 @@ public class LoginController extends HttpServlet {
         String password = request.getParameter("txtPassword");
 
         try {
-            UserDAO userDAO = new UserDAO();
-            User currentUser = null;
+            AccountDAO accountDAO = new AccountDAO();
+            Account currentUser = null;
             //0.try login in và bắt lỗi
             try {
-                currentUser = userDAO.login(userName, password);
+                currentUser = accountDAO.login(userName, password);
             } catch (Exception e) {
                 ArrayList<String> canCatchExceptionList = new ArrayList<String>();
                 canCatchExceptionList.add(ErrorMessage.USERNAME_OR_PASSWORD_INCORRECT.enumToString());
@@ -65,7 +65,7 @@ public class LoginController extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("userLoggedIn", currentUser);
                 //kt admin và forward sang admin
-                if (currentUser.getIsAdmin()) {
+                if (currentUser.getType().equals("admin")) {
                     forwardURL = RoutePage.SEARCH_PAGE.enumToString();
                 } else { // not admin
                     forwardURL = RouteController.USER_CONTROLLER_SERVLET + "?action=Details&&UserName=" + userName;

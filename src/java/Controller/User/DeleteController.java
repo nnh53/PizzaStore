@@ -3,8 +3,8 @@ package Controller.User;
 import Constant.ErrorMessage;
 import Constant.RouteController;
 import Constant.RoutePage;
-import Model.DAO.UserDAO;
-import Model.DTO.User;
+import Model.DAO.AccountDAO;
+import Model.DTO.Account;
 
 import javax.servlet.RequestDispatcher;
 
@@ -45,7 +45,7 @@ public class DeleteController extends HttpServlet {
 
             //0.try validate data input
             HttpSession session = request.getSession();
-            User userLoggedIn = (User) session.getAttribute("userLoggedIn");
+            Account userLoggedIn = (Account) session.getAttribute("userLoggedIn");
             String userName = request.getParameter("UserName");
             String searchValue = request.getParameter("txtSearchValue");
 
@@ -62,8 +62,8 @@ public class DeleteController extends HttpServlet {
 
             //1.try ... bắt lỗi và ghi vào message
             try {
-                UserDAO userDAO = new UserDAO();
-                userDAO.deleteUserByUserName(userName);
+                AccountDAO accountDAO = new AccountDAO();
+                accountDAO.deleteAccountByAccountId(userName);
             } catch (Exception e) {
                 ErrorMessage errorMessage = ErrorMessage.valueOf(e.getMessage()); //cố gắng parse error coi có dạng ErrorMessage ko
                 switch (errorMessage) {

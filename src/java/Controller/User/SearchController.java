@@ -3,8 +3,8 @@ package Controller.User;
 import Constant.ErrorMessage;
 import Constant.RouteController;
 import Constant.RoutePage;
-import Model.DAO.UserDAO;
-import Model.DTO.User;
+import Model.DAO.AccountDAO;
+import Model.DTO.Account;
 
 import javax.servlet.RequestDispatcher;
 
@@ -42,7 +42,7 @@ public class SearchController extends HttpServlet {
 
         //start try tổng của servlet
         try {
-            ArrayList<User> rsList = null;
+            ArrayList<Account> rsList = null;
 
             //0.try validate data input
             String searchValue = request.getParameter("txtSearchValue");
@@ -53,8 +53,8 @@ public class SearchController extends HttpServlet {
             }
 
             //1. try ... bắt lỗi và ghi vào message
-            UserDAO userDAO = new UserDAO();
-            rsList = userDAO.searchUserByLastName(searchValue);
+            AccountDAO userDAO = new AccountDAO();
+            rsList = userDAO.searchAccountFullName(searchValue);
             request.setAttribute("SearchResult", rsList);
 
             //2. thành công
