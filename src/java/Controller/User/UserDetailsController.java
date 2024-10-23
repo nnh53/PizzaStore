@@ -3,8 +3,8 @@ package Controller.User;
 import Constant.ErrorMessage;
 import Constant.RouteController;
 import Constant.RoutePage;
-import Model.DAO.UserDAO;
-import Model.DTO.User;
+import Model.DAO.AccountDAO;
+import Model.DTO.Account;
 
 import javax.servlet.RequestDispatcher;
 
@@ -54,10 +54,10 @@ public class UserDetailsController extends HttpServlet {
             }
 
             //1.try ... bắt lỗi và ghi vào message
-            User userDetail = null;
+            Account userDetail = null;
             try {
-                UserDAO userDAO = new UserDAO();
-                userDetail = userDAO.getUserByUserName(userName);
+                AccountDAO userDAO = new AccountDAO();
+                userDetail = userDAO.getAccountByUserName(userName);
 
             } catch (Exception e) {
                 ArrayList<String> canCatchExceptionList = new ArrayList<String>();

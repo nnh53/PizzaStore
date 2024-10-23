@@ -3,8 +3,8 @@ package Controller.User;
 import Constant.ErrorMessage;
 import Constant.RouteController;
 import Constant.RoutePage;
-import Model.DAO.UserDAO;
-import Model.DTO.User;
+import Model.DAO.AccountDAO;
+import Model.DTO.Account;
 import Model.DTO.UserError;
 
 import javax.servlet.RequestDispatcher;
@@ -77,9 +77,9 @@ public class UpdateController extends HttpServlet {
 
             //1.try ... bắt lỗi và ghi vào message
             try {
-                UserDAO userDAO = new UserDAO();
-                User userToUpdate = new User(userName, password, lastName, isAdmin);
-                userDAO.updateUser(userToUpdate);
+                AccountDAO userDAO = new AccountDAO();
+//                Account userToUpdate = new Account(userName, password, lastName, isAdmin);
+//                userDAO.updateAcccount(userToUpdate);
 
             } catch (Exception e) {
                 ErrorMessage errorMessage = ErrorMessage.valueOf(e.getMessage()); //cố gắng parse error coi có dạng ErrorMessage ko

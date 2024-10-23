@@ -43,6 +43,23 @@ public class AccountDAO {
         return lastID;
     }
 
+    public String generateID() throws Exception {
+        Connection cn = DBConnection.getConnection();
+        ResultSet rs = null;
+        String sql = "SELECT COUNT(accountID) FROM Account";
+        rs = DBConnection.getResultSetFromQuery(cn, sql); //truyền đúng tham số theo sql ko là đi
+        //2.parse/map result
+        int count = 0;
+        String id = null;
+        if (rs != null && rs.next()) {
+            count = rs.getInt(1); //theo lấy theo đúng sql
+            rs.close();
+        }
+        id = generateID(count + 1);
+        cn.close();
+        return id;
+    }
+
     public Account getAccountByAccountID(String searchID) throws Exception {
         //1.lấy data từ db
         Connection cn = DBConnection.getConnection();

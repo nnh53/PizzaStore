@@ -1,10 +1,11 @@
 package Controller.User;
 
+import Constant.DBMessage;
 import Constant.ErrorMessage;
 import Constant.RouteController;
 import Constant.RoutePage;
-import Model.DAO.UserDAO;
-import Model.DTO.User;
+import Model.DAO.AccountDAO;
+import Model.DTO.Account;
 import Model.DTO.UserError;
 
 import javax.servlet.RequestDispatcher;
@@ -48,7 +49,7 @@ public class CreateController extends HttpServlet {
             UserError userError = new UserError();
             String userName = request.getParameter("txtUserName");
             String password = request.getParameter("txtPassword");
-            String lastName = request.getParameter("txtLastName");
+            String fullname = request.getParameter("txtLastName");
             String adminCheckParam = request.getParameter("chkIsAdmin");
 
             //0.1 check userName format Uxxx, x is digit
@@ -62,7 +63,7 @@ public class CreateController extends HttpServlet {
                 isError = true;
             }
             //0.3 check lastName must be 5-20 characters
-            if (!lastName.matches(".{5,20}")) {
+            if (!fullname.matches(".{5,20}")) {
                 userError.setLastNameError("Last name must be 5-20 characters");
                 isError = true;
             }
@@ -78,9 +79,15 @@ public class CreateController extends HttpServlet {
 
             //1.try ... bắt lỗi và ghi vào message
             try {
-                UserDAO userDAO = new UserDAO();
-                User userToAdd = new User(userName, password, lastName, isAdmin);
-                userDAO.addUser(userToAdd);
+                AccountDAO userDAO = new AccountDAO();
+                String id = userDAO.generateID();
+                if (isAdmin) {
+                    Account userToAdd = new Account(id, userName, password, fullname, "admin", DBMessage.ACTIVE.toString());
+                    userDAO.addAccount(userToAdd);
+                } else {
+                    Account userToAdd = new Account(id, userName, password, fullname, "user", DBMessage.ACTIVE.toString());
+                    userDAO.addAccount(userToAdd);
+                }
             } catch (Exception e) {
                 ArrayList<String> canCatchExceptionList = new ArrayList<String>();
                 canCatchExceptionList.add(ErrorMessage.USERNAME_ALREADY_EXISTS.enumToString());
