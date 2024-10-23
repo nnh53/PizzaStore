@@ -16,16 +16,18 @@ public class Customer {
     private String contactName;
     private String address;
     private String phone;
+    private String status;
 
     public Customer() {
     }
 
-    public Customer(String customerID, String password, String contactName, String address, String phone) {
+    public Customer(String customerID, String password, String contactName, String address, String phone, String status) {
         this.customerID = customerID;
         this.password = password;
         this.contactName = contactName;
         this.address = address;
         this.phone = phone;
+        this.status = status;
     }
 
     public String getCustomerID() {
@@ -68,9 +70,17 @@ public class Customer {
         this.phone = phone;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "Customer{" + "customerID=" + customerID + ", password=" + password + ", contactName=" + contactName + ", address=" + address + ", phone=" + phone + '}';
+        return "Customer{" + "customerID=" + customerID + ", password=" + password + ", contactName=" + contactName + ", address=" + address + ", phone=" + phone + ", status=" + status + '}';
     }
 
 }

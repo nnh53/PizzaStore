@@ -15,15 +15,17 @@ public class Order {
     private String customerID;
     private String orderDate;
     private String shipAddress;
+    private String status;
 
     public Order() {
     }
 
-    public Order(String orderID, String customerID, String orderDate, String shipAddress) {
+    public Order(String orderID, String customerID, String orderDate, String shipAddress, String status) {
         this.orderID = orderID;
         this.customerID = customerID;
         this.orderDate = orderDate;
         this.shipAddress = shipAddress;
+        this.status = status;
     }
 
     public String getOrderID() {
@@ -58,9 +60,17 @@ public class Order {
         this.shipAddress = shipAddress;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "Order{" + "orderID=" + orderID + ", customerID=" + customerID + ", orderDate=" + orderDate + ", shipAddress=" + shipAddress + '}';
+        return "Order{" + "orderID=" + orderID + ", customerID=" + customerID + ", orderDate=" + orderDate + ", shipAddress=" + shipAddress + ", status=" + status + '}';
     }
 
 }

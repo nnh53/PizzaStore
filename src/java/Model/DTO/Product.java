@@ -17,8 +17,19 @@ public class Product {
     private String categoryID;
     private String unitPrice;
     private String productImageUrl;
+    private String status;
 
     public Product() {
+    }
+
+    public Product(String productID, String productName, String supplierID, String categoryID, String unitPrice, String productImageUrl, String status) {
+        this.productID = productID;
+        this.productName = productName;
+        this.supplierID = supplierID;
+        this.categoryID = categoryID;
+        this.unitPrice = unitPrice;
+        this.productImageUrl = productImageUrl;
+        this.status = status;
     }
 
     public String getProductID() {
@@ -69,9 +80,17 @@ public class Product {
         this.productImageUrl = productImageUrl;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "Product{" + "productID=" + productID + ", productName=" + productName + ", supplierID=" + supplierID + ", categoryID=" + categoryID + ", unitPrice=" + unitPrice + ", productImageUrl=" + productImageUrl + '}';
+        return "Product{" + "productID=" + productID + ", productName=" + productName + ", supplierID=" + supplierID + ", categoryID=" + categoryID + ", unitPrice=" + unitPrice + ", productImageUrl=" + productImageUrl + ", status=" + status + '}';
     }
 
 }

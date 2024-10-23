@@ -115,87 +115,87 @@ public class AccountDAO {
         return (af > 0) ? accountToAdd : null; // thành công trả chính nó, ko thì null
     }//end addAccount
 
-//    //delete thành công trả lại thằng vừa delete không thì null hoặc thrown lỗi
-//    public Account deleteUserByUserName(String userNameToDelete) throws Exception {
-//        Connection cn = DBConnection.getConnection();
-//        //1.kiểm tra userName có tồn tại chưa
-//        User tmpUser = this.getUserByUserName(userNameToDelete);
-//        if (tmpUser == null) {
-//            //throw new Exception(ErrorMessage.USERNAME_NOT_EXISTS.enumToString()); -thrown rồi
-//        }
-//        //2.delete khỏi db
-//        int af = 0;
-//        String sql = "DELETE FROM dbo.Registration WHERE [UserName]=?";
-//        af = DBConnection.getAffectedRowsFromUpdate(cn, sql, userNameToDelete); //truyền đúng tham số theo sql ko là đi
-//        cn.close();
-//        return (af > 0) ? tmpUser : null; // thành công trả chính nó, ko thì null
-//    }//end deleteUserByUserName
-//
-//    public User login(String userName, String password) throws Exception {
-//        //0.kiểm tra userName có tồn tại chưa
-//        User tmpUser = this.getUserByUserName(userName);
-//        if (tmpUser == null) {
-//            //throw new Exception(ErrorMessage.USERNAME_NOT_EXISTS.enumToString()); -hàm getUserByUserName quăng rồi
-//        }
-//        //1.lấy data từ db
-//        Connection cn = DBConnection.getConnection();
-//        ResultSet rs = null;
-//        String sql = "SELECT LastName,IsAdmin FROM dbo.Registration WHERE [UserName]=? AND [Password]=?";
-//        rs = DBConnection.getResultSetFromQuery(cn, sql, userName, password); //truyền đúng tham số theo sql ko là đi
-//        //2.parse/map result
-//        User userRS = null;
-//        if (rs != null && rs.next()) {
-//            String lastName = rs.getString(1); //theo lấy 1 2 theo đúng sql
-//            boolean isAdmin = rs.getBoolean(2);
-//            userRS = new User(userName, password, lastName, isAdmin);
-//            rs.close();
-//        }
-//        cn.close();
-//        if (userRS == null) {
-//            throw new Exception(ErrorMessage.USERNAME_OR_PASSWORD_INCORRECT.enumToString());
-//        }
-//        return userRS;
-//    }//end login
-//
-//    public ArrayList<User> searchUserByLastName(String searchValue) throws Exception {
-//        //data
-//        ArrayList<User> userListHasFound = new ArrayList<>();
-//
-//        //1.lấy data từ db
-//        Connection cn = DBConnection.getConnection();
-//        ResultSet rs = null;
-//        String sql = "SELECT UserName,LastName,IsAdmin,Password FROM dbo.Registration WHERE [LastName] LIKE ?";
-//        rs = DBConnection.getResultSetFromQuery(cn, sql, searchValue); //truyền đúng tham số theo sql ko là đi
-//        //2.parse/map result
-//        User userRS = null;
-//        if (rs != null && rs.next()) {
-//            String userName = rs.getString(1); //theo lấy 1 2 theo đúng sql
-//            String lastName = rs.getString(2);
-//            boolean isAdmin = rs.getBoolean(3);
-//            String password = rs.getString(4);
-//            userRS = new User(userName, password, lastName, isAdmin);
-//            userListHasFound.add(userRS);
-//            rs.close();
-//        }
-//        cn.close();
-//        return (userListHasFound.isEmpty() == true) ? null : userListHasFound;
-//    }//end searchUserByLastName
-//
-//    //update thành công trả lại thằng vừa update không thì null hoặc thrown lỗi
-//    public User updateUser(User userToUpdate) throws Exception {
-//        Connection cn = DBConnection.getConnection();
-//        //1.kiểm tra userName có tồn tại chưa
-//        User tmpUser = this.getUserByUserName(userToUpdate.getUserName());
-//        if (tmpUser == null) {
-//            throw new Exception(ErrorMessage.USERNAME_NOT_EXISTS.enumToString());
-//        }
-//        //GIỮ LẠI THUỘC TÍNH GÌ CŨ THÌ LẤY LẠI TMP USER XÀI
-//
-//        //2.update vô db
-//        int af = 0;
-//        String sql = "UPDATE dbo.Registration SET [UserName]=?,[Password]=?,[LastName]=?,[IsAdmin]=? WHERE UserName=?"; //CHÚ Ý CÁI WHERE LÀ CÁI CUỐI
-//        af = DBConnection.getAffectedRowsFromUpdate(cn, sql, userToUpdate.getUserName(), userToUpdate.getPassword(), userToUpdate.getLastName(), userToUpdate.getIsAdmin(), tmpUser.getUserName()); //truyền đúng tham số theo sql ko là đi
-//        cn.close();
-//        return (af > 0) ? userToUpdate : null; // thành công trả chính nó, ko thì null
-//    }//end updateUser
+    //delete thành công trả lại thằng vừa delete không thì null hoặc thrown lỗi
+    public Account deleteUserByUserName(String userNameToDelete) throws Exception {
+        Connection cn = DBConnection.getConnection();
+        //1.kiểm tra userName có tồn tại chưa
+        User tmpUser = this.getUserByUserName(userNameToDelete);
+        if (tmpUser == null) {
+            //throw new Exception(ErrorMessage.USERNAME_NOT_EXISTS.enumToString()); -thrown rồi
+        }
+        //2.delete khỏi db
+        int af = 0;
+        String sql = "DELETE FROM dbo.Registration WHERE [UserName]=?";
+        af = DBConnection.getAffectedRowsFromUpdate(cn, sql, userNameToDelete); //truyền đúng tham số theo sql ko là đi
+        cn.close();
+        return (af > 0) ? tmpUser : null; // thành công trả chính nó, ko thì null
+    }//end deleteUserByUserName
+
+    public User login(String userName, String password) throws Exception {
+        //0.kiểm tra userName có tồn tại chưa
+        User tmpUser = this.getUserByUserName(userName);
+        if (tmpUser == null) {
+            //throw new Exception(ErrorMessage.USERNAME_NOT_EXISTS.enumToString()); -hàm getUserByUserName quăng rồi
+        }
+        //1.lấy data từ db
+        Connection cn = DBConnection.getConnection();
+        ResultSet rs = null;
+        String sql = "SELECT LastName,IsAdmin FROM dbo.Registration WHERE [UserName]=? AND [Password]=?";
+        rs = DBConnection.getResultSetFromQuery(cn, sql, userName, password); //truyền đúng tham số theo sql ko là đi
+        //2.parse/map result
+        User userRS = null;
+        if (rs != null && rs.next()) {
+            String lastName = rs.getString(1); //theo lấy 1 2 theo đúng sql
+            boolean isAdmin = rs.getBoolean(2);
+            userRS = new User(userName, password, lastName, isAdmin);
+            rs.close();
+        }
+        cn.close();
+        if (userRS == null) {
+            throw new Exception(ErrorMessage.USERNAME_OR_PASSWORD_INCORRECT.enumToString());
+        }
+        return userRS;
+    }//end login
+
+    public ArrayList<User> searchUserByLastName(String searchValue) throws Exception {
+        //data
+        ArrayList<User> userListHasFound = new ArrayList<>();
+
+        //1.lấy data từ db
+        Connection cn = DBConnection.getConnection();
+        ResultSet rs = null;
+        String sql = "SELECT UserName,LastName,IsAdmin,Password FROM dbo.Registration WHERE [LastName] LIKE ?";
+        rs = DBConnection.getResultSetFromQuery(cn, sql, searchValue); //truyền đúng tham số theo sql ko là đi
+        //2.parse/map result
+        User userRS = null;
+        if (rs != null && rs.next()) {
+            String userName = rs.getString(1); //theo lấy 1 2 theo đúng sql
+            String lastName = rs.getString(2);
+            boolean isAdmin = rs.getBoolean(3);
+            String password = rs.getString(4);
+            userRS = new User(userName, password, lastName, isAdmin);
+            userListHasFound.add(userRS);
+            rs.close();
+        }
+        cn.close();
+        return (userListHasFound.isEmpty() == true) ? null : userListHasFound;
+    }//end searchUserByLastName
+
+    //update thành công trả lại thằng vừa update không thì null hoặc thrown lỗi
+    public User updateUser(User userToUpdate) throws Exception {
+        Connection cn = DBConnection.getConnection();
+        //1.kiểm tra userName có tồn tại chưa
+        User tmpUser = this.getUserByUserName(userToUpdate.getUserName());
+        if (tmpUser == null) {
+            throw new Exception(ErrorMessage.USERNAME_NOT_EXISTS.enumToString());
+        }
+        //GIỮ LẠI THUỘC TÍNH GÌ CŨ THÌ LẤY LẠI TMP USER XÀI
+
+        //2.update vô db
+        int af = 0;
+        String sql = "UPDATE dbo.Registration SET [UserName]=?,[Password]=?,[LastName]=?,[IsAdmin]=? WHERE UserName=?"; //CHÚ Ý CÁI WHERE LÀ CÁI CUỐI
+        af = DBConnection.getAffectedRowsFromUpdate(cn, sql, userToUpdate.getUserName(), userToUpdate.getPassword(), userToUpdate.getLastName(), userToUpdate.getIsAdmin(), tmpUser.getUserName()); //truyền đúng tham số theo sql ko là đi
+        cn.close();
+        return (af > 0) ? userToUpdate : null; // thành công trả chính nó, ko thì null
+    }//end updateUser
 }
