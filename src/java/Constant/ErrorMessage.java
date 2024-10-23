@@ -10,7 +10,11 @@ package Constant;
  * @author hoangnn
  */
 public enum ErrorMessage {
-
+    //category not existed
+    
+    //category already existed
+    CATEGORY_ALREADY_EXISTS("Category already existed"),
+    CATEGORY_NOT_EXISTS("Category not existed"),
     SUPPLIER_ALREADY_EXISTS("Supplier already existed"),
     SUPPLIER_NOT_EXISTS("Supplier not existed"),
     ACCOUNT_NOT_EXISTS("Account not existed"),

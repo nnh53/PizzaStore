@@ -14,14 +14,16 @@ public class Category {
     private String categoryID; //UNIQUE
     private String categoryName; //UNIQUE
     private String description;
+    private String status;
 
     public Category() {
     }
 
-    public Category(String categoryID, String categoryName, String description) {
+    public Category(String categoryID, String categoryName, String description, String status) {
         this.categoryID = categoryID;
         this.categoryName = categoryName;
         this.description = description;
+        this.status = status;
     }
 
     public String getCategoryID() {
@@ -48,9 +50,17 @@ public class Category {
         this.description = description;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "Category{" + "categoryID=" + categoryID + ", categoryName=" + categoryName + ", description=" + description + '}';
+        return "Category{" + "categoryID=" + categoryID + ", categoryName=" + categoryName + ", description=" + description + ", status=" + status + '}';
     }
 
 }
