@@ -15,15 +15,17 @@ public class Supplier {
     private String companyName;
     private String address;
     private String phone;
+    private String status;
 
     public Supplier() {
     }
 
-    public Supplier(String supplierID, String companyName, String address, String phone) {
+    public Supplier(String supplierID, String companyName, String address, String phone, String status) {
         this.supplierID = supplierID;
         this.companyName = companyName;
         this.address = address;
         this.phone = phone;
+        this.status = status;
     }
 
     public String getSupplierID() {
@@ -58,9 +60,17 @@ public class Supplier {
         this.phone = phone;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "Supplier{" + "supplierID=" + supplierID + ", companyName=" + companyName + ", address=" + address + ", phone=" + phone + '}';
+        return "Supplier{" + "supplierID=" + supplierID + ", companyName=" + companyName + ", address=" + address + ", phone=" + phone + ", status=" + status + '}';
     }
 
 }

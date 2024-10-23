@@ -10,6 +10,9 @@ package Constant;
  * @author hoangnn
  */
 public enum ErrorMessage {
+
+    SUPPLIER_ALREADY_EXISTS("Supplier already existed"),
+    SUPPLIER_NOT_EXISTS("Supplier not existed"),
     ACCOUNT_NOT_EXISTS("Account not existed"),
     USERNAME_ALREADY_EXISTS("UserName already existed"),
     USERNAME_NOT_EXISTS("UserName not existed"),
