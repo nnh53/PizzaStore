@@ -51,6 +51,7 @@ public class LoginController extends HttpServlet {
                 ArrayList<String> canCatchExceptionList = new ArrayList<String>();
                 canCatchExceptionList.add(ErrorMessage.USERNAME_OR_PASSWORD_INCORRECT.enumToString());
                 canCatchExceptionList.add(ErrorMessage.USERNAME_NOT_EXISTS.enumToString());
+                canCatchExceptionList.add(ErrorMessage.ACCOUNT_NOT_EXISTS.enumToString());
                 //0.1 check coi có văng lỗi nào mình kiểm soát đc ko
                 if (canCatchExceptionList.contains(e.getMessage().toString())) {
                     //0.2 xử lý lỗi

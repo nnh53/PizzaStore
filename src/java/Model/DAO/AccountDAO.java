@@ -176,7 +176,7 @@ public class AccountDAO {
         //0.kiểm tra userName có tồn tại chưa
         Account tmpAccount = this.getAccountByUserName(userNameInp);
         if (tmpAccount == null) {
-            //throw new Exception(ErrorMessage.USERNAME_NOT_EXISTS.enumToString()); -hàm getUserByUserName quăng rồi
+            throw new Exception(ErrorMessage.USERNAME_OR_PASSWORD_INCORRECT.enumToString()); //-hàm getUserByUserName quăng rồi
         }
         //1.lấy data từ db
         Connection cn = DBConnection.getConnection();
