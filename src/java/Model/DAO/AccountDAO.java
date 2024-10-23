@@ -8,7 +8,6 @@ package Model.DAO;
 import Constant.DBMessage;
 import Constant.ErrorMessage;
 import Model.DTO.Account;
-import Model.DTO.User;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
