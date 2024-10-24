@@ -5,6 +5,8 @@
  */
 package Model.DTO;
 
+import Constant.DBMessage;
+
 /**
  *
  * @author hoangnn
@@ -16,7 +18,7 @@ public class Account {
     private String password;
     private String fullName;
     private String type;
-    private String status;
+    private String status = DBMessage.ACTIVE.enumToString();
 
     public Account() {
     }
@@ -27,7 +29,7 @@ public class Account {
         this.password = password;
         this.fullName = fullName;
         this.type = type;
-        this.status = status;
+        this.status = DBMessage.ACTIVE.enumToString();
     }
 
     public String getAccountID() {

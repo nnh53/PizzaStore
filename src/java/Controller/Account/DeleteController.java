@@ -1,5 +1,6 @@
-package Controller.User;
+package Controller.Account;
 
+import Controller.User.*;
 import Constant.ErrorMessage;
 import Constant.RouteController;
 import Constant.RoutePage;
@@ -10,19 +11,19 @@ import javax.servlet.RequestDispatcher;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author hoangnn
  */
-@WebServlet(name = "SearchController", urlPatterns = {"/SearchController"})
-public class SearchController extends HttpServlet {
+@WebServlet(name = "DeleteController", urlPatterns = {"/DeleteController"})
+public class DeleteController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,26 +43,46 @@ public class SearchController extends HttpServlet {
 
         //start try tổng của servlet
         try {
-            ArrayList<Account> rsList = null;
 
             //0.try validate data input
+            HttpSession session = request.getSession();
+            Account userLoggedIn = (Account) session.getAttribute("userLoggedIn");
+            String userName = request.getParameter("UserName");
             String searchValue = request.getParameter("txtSearchValue");
-            //0.1 check searchValue not emtpy
+
+            //0.1 check userName not LOGIN
+            if (userName.equals(userLoggedIn.getUserName())) {
+                messageForward = "This user is logged in. Cannot be delete";
+                throw new Exception(ErrorMessage.INPUT_INVALID.enumToString());
+            }
+            //0.2 check searchValue not emtpy
             if (searchValue.isEmpty()) {
                 messageForward = "Search value must not be empty";
                 throw new Exception(ErrorMessage.INPUT_INVALID.enumToString());
             }
 
-            //1. try ... bắt lỗi và ghi vào message
-            AccountDAO userDAO = new AccountDAO();
-            rsList = userDAO.searchAccountFullName(searchValue);
-            request.setAttribute("SearchResult", rsList);
+            //1.try ... bắt lỗi và ghi vào message
+            try {
+                AccountDAO accountDAO = new AccountDAO();
+                accountDAO.deleteAccountByAccountId(userName);
+            } catch (Exception e) {
+                ErrorMessage errorMessage = ErrorMessage.valueOf(e.getMessage()); //cố gắng parse error coi có dạng ErrorMessage ko
+                switch (errorMessage) {
+                    case USERNAME_NOT_EXISTS: {
+                        messageForward = errorMessage.enumToString();
+                        break;
+                    }
+                }
+                //1.1 xử lý trường hợp sai (chuyển trang, vv)
+                forwardURL = RouteController.USER_CONTROLLER_SERVLET.enumToString() + "?action=Search&txtSearchValue" + searchValue;
+            }
 
             //2. thành công
-            forwardURL = RoutePage.SEARCH_PAGE.enumToString();
-            messageForward = "Search successfully";
+            forwardURL = RouteController.USER_CONTROLLER_SERVLET.enumToString();
+            messageForward = "";
             //2.1làm đẹp
             messageForward = "<b style='color: green'>" + messageForward + "</b>";
+            messageForward = "Delete user successfully";
 
         } catch (Exception ex) { //catch ALL exception
             log(ex.getMessage());

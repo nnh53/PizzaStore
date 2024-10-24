@@ -1,26 +1,29 @@
-package Controller.User;
+package Controller.Account;
 
+import Controller.User.*;
 import Constant.ErrorMessage;
 import Constant.RouteController;
 import Constant.RoutePage;
+import Model.DAO.AccountDAO;
+import Model.DTO.Account;
 
 import javax.servlet.RequestDispatcher;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author hoangnn
  */
-@WebServlet(name = "UserController", urlPatterns = {"/UserController"})
-public class UserController extends HttpServlet {
+@WebServlet(name = "SearchController", urlPatterns = {"/SearchController"})
+public class SearchController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,61 +36,48 @@ public class UserController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
 
         String forwardURL = RoutePage.NOT_FOUND_PAGE.enumToString(); //set mặc định
-        String messageForward = ErrorMessage.SOMETHING_WRONG.enumToString();  //set mặc định
-        String action = request.getParameter("action");
+        String messageForward = "";  //set mặc định
 
         //start try tổng của servlet
         try {
-            HttpSession session = request.getSession();
-            boolean isLoggedIn = (session.getAttribute("userLoggedIn") == null) ? false : true;
+            ArrayList<Account> rsList = null;
 
-            //1. không cần login
-            if (isLoggedIn == false) {
-                switch (action) {
-                    case "Create": {
-                        forwardURL = RouteController.CREATE_USER_CONTROLLER.enumToString();
-                        break;
-                    }
-                }
+            //0.try validate data input
+            String searchValue = request.getParameter("txtSearchValue");
+            //0.1 check searchValue not emtpy
+            if (searchValue.isEmpty()) {
+                messageForward = "Search value must not be empty";
+                throw new Exception(ErrorMessage.INPUT_INVALID.enumToString());
             }
-            //2. cần authen
-            if (isLoggedIn == true) {
-                switch (action) {
-                    case "Search": {
-                        forwardURL = RouteController.SEARCH_USER_CONTROLLER.enumToString();
-                        break;
-                    }
-                    case "Delete": {
-                        forwardURL = RouteController.DELETE_USER_CONTROLLER.enumToString();
-                        break;
-                    }
-                    case "Update": {
-                        forwardURL = RouteController.UPDATE_USER_CONTROLLER.enumToString();
-                        break;
-                    }
-                    case "Details": {
-                        forwardURL = RouteController.USER_DETAIL_CONTROLLER.enumToString();
-                        break;
-                    }
-                }
-            }
-            //3. chưa đc login
-            forwardURL = RoutePage.LOGIN_PAGE.enumToString();
+
+            //1. try ... bắt lỗi và ghi vào message
+            AccountDAO userDAO = new AccountDAO();
+            rsList = userDAO.searchAccountFullName(searchValue);
+            request.setAttribute("SearchResult", rsList);
+
+            //2. thành công
+            forwardURL = RoutePage.SEARCH_PAGE.enumToString();
+            messageForward = "Search successfully";
+            //2.1làm đẹp
+            messageForward = "<b style='color: green'>" + messageForward + "</b>";
 
         } catch (Exception ex) { //catch ALL exception
             log(ex.getMessage());
             ex = null;
-            //bắt để đừng crash app
-        } finally {
+            //làm đẹp
+            messageForward = "<b style='color: red'>" + messageForward + "</b>";
             request.setAttribute("message", messageForward);
+        } finally {
+            out.close();
             RequestDispatcher rd = request.getRequestDispatcher(forwardURL);
             rd.forward(request, response);
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="Expression servletEditorFold is undefined on line 91, column 54 in Templates/JSP_Servlet/Controller.java.">
+    // <editor-fold defaultstate="collapsed" desc="Expression servletEditorFold is undefined on line 90, column 54 in Templates/JSP_Servlet/Controller.java.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

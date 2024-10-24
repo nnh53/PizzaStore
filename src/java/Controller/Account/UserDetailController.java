@@ -1,27 +1,29 @@
-package Controller.Authentication;
+package Controller.Account;
 
+import Controller.Account.*;
 import Constant.ErrorMessage;
 import Constant.RouteController;
 import Constant.RoutePage;
 import Model.DAO.AccountDAO;
 import Model.DTO.Account;
+
+import javax.servlet.RequestDispatcher;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author hoangnn
  */
-@WebServlet(name = "LoginController", urlPatterns = {"/LoginController"})
-public class LoginController extends HttpServlet {
+@WebServlet(name = "UserDetailController", urlPatterns = {"/UserDetailController"})
+public class UserDetailController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,37 +37,29 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        String forwardURL = "";
-        String messageForward = "";
-        String userName = request.getParameter("txtUserName");
-        String password = request.getParameter("txtPassword");
+        String forwardURL = RoutePage.NOT_FOUND_PAGE.enumToString(); //set mặc định
+        String messageForward = ErrorMessage.SOMETHING_WRONG.enumToString();  //set mặc định
 
+        //start try tổng của servlet
         try {
-            AccountDAO accountDAO = new AccountDAO();
-            Account currentUser = accountDAO.login(userName, password);
+            //login rồi ms đc vô
+            String userName = request.getParameter("UserName");
 
-            //1.login thành công
-            if (currentUser != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("userLoggedIn", currentUser);
-                //kt admin và forward sang admin
-                if (currentUser.getType().equals("admin")) {
-                    forwardURL = RoutePage.SEARCH_PAGE.enumToString();
-                    messageForward = "admin";
-                } else { // not admin
-                    forwardURL = RouteController.USER_CONTROLLER_SERVLET.enumToString() + "?action=Details&&UserName=" + userName;
-                    messageForward = "detail";
-                }
-            }
+            Account userDetail = null;
+            AccountDAO userDAO = new AccountDAO();
+            userDetail = userDAO.getAccountByUserName(userName); //tìm
+
+            //2. thành công
+            request.setAttribute("userDetail", userDetail);
+            forwardURL = RoutePage.USER_DETAIL_PAGE.enumToString();
+            messageForward = "User Detail get successfully";
         } catch (Exception ex) { //catch ALL exception
             ArrayList<String> canCatchExceptionList = new ArrayList<String>();
-            canCatchExceptionList.add(ErrorMessage.USERNAME_OR_PASSWORD_INCORRECT.enumToString());
             canCatchExceptionList.add(ErrorMessage.USERNAME_NOT_EXISTS.enumToString());
-            canCatchExceptionList.add(ErrorMessage.ACCOUNT_NOT_EXISTS.enumToString());
-            //0.1 check coi có văng lỗi nào mình kiểm soát đc ko
+            //1.1 check coi có văng lỗi nào mình kiểm soát đc ko
             if (canCatchExceptionList.contains(ex.getMessage().toString())) {
-                //0.2 xử lý lỗi
-                forwardURL = RoutePage.LOGIN_PAGE.enumToString(); //quay lại login đê
+                //1.2 xử lý lỗi / trường hợp sai (chuyển trang, vv)
+                forwardURL = RoutePage.USER_DETAIL_PAGE.enumToString(); //quay lại
                 messageForward = ex.getMessage().toString(); //set message là cái message đã bắt đc
             } else {
                 log("================== 500 ===================");
@@ -74,7 +68,6 @@ public class LoginController extends HttpServlet {
                 forwardURL = RoutePage.NOT_FOUND_PAGE.enumToString(); //set mặc định
                 messageForward = ErrorMessage.SOMETHING_WRONG.enumToString();  //set mặc định
             }
-            //route và message về mặc định
         } finally {
             request.setAttribute("message", messageForward);
             RequestDispatcher rd = request.getRequestDispatcher(forwardURL);
@@ -82,7 +75,7 @@ public class LoginController extends HttpServlet {
         }
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="Expression servletEditorFold is undefined on line 91, column 54 in Templates/JSP_Servlet/Controller.java.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

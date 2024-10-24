@@ -1,10 +1,9 @@
-package Controller.User;
+package Controller.Account;
 
+import Controller.Account.*;
 import Constant.ErrorMessage;
 import Constant.RouteController;
 import Constant.RoutePage;
-import Model.DAO.AccountDAO;
-import Model.DTO.Account;
 
 import javax.servlet.RequestDispatcher;
 
@@ -21,8 +20,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author hoangnn
  */
-@WebServlet(name = "DeleteController", urlPatterns = {"/DeleteController"})
-public class DeleteController extends HttpServlet {
+@WebServlet(name = "UserController", urlPatterns = {"/UserController"})
+public class UserController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,68 +34,61 @@ public class DeleteController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
 
         String forwardURL = RoutePage.NOT_FOUND_PAGE.enumToString(); //set mặc định
-        String messageForward = "";  //set mặc định
+        String messageForward = ErrorMessage.SOMETHING_WRONG.enumToString();  //set mặc định
+        String action = request.getParameter("action");
 
         //start try tổng của servlet
         try {
-
-            //0.try validate data input
             HttpSession session = request.getSession();
-            Account userLoggedIn = (Account) session.getAttribute("userLoggedIn");
-            String userName = request.getParameter("UserName");
-            String searchValue = request.getParameter("txtSearchValue");
+            boolean isLoggedIn = (session.getAttribute("userLoggedIn") == null) ? false : true;
 
-            //0.1 check userName not LOGIN
-            if (userName.equals(userLoggedIn.getUserName())) {
-                messageForward = "This user is logged in. Cannot be delete";
-                throw new Exception(ErrorMessage.INPUT_INVALID.enumToString());
-            }
-            //0.2 check searchValue not emtpy
-            if (searchValue.isEmpty()) {
-                messageForward = "Search value must not be empty";
-                throw new Exception(ErrorMessage.INPUT_INVALID.enumToString());
-            }
-
-            //1.try ... bắt lỗi và ghi vào message
-            try {
-                AccountDAO accountDAO = new AccountDAO();
-                accountDAO.deleteAccountByAccountId(userName);
-            } catch (Exception e) {
-                ErrorMessage errorMessage = ErrorMessage.valueOf(e.getMessage()); //cố gắng parse error coi có dạng ErrorMessage ko
-                switch (errorMessage) {
-                    case USERNAME_NOT_EXISTS: {
-                        messageForward = errorMessage.enumToString();
+            //1. không cần login
+            if (isLoggedIn == false) {
+                switch (action) {
+                    case "Create": {
+                        forwardURL = RouteController.CREATE_USER_CONTROLLER.enumToString();
                         break;
                     }
                 }
-                //1.1 xử lý trường hợp sai (chuyển trang, vv)
-                forwardURL = RouteController.USER_CONTROLLER_SERVLET.enumToString() + "?action=Search&txtSearchValue" + searchValue;
+                //3. chưa đc login
+                forwardURL = RoutePage.LOGIN_PAGE.enumToString();
             }
-
-            //2. thành công
-            forwardURL = RouteController.USER_CONTROLLER_SERVLET.enumToString();
-            messageForward = "";
-            //2.1làm đẹp
-            messageForward = "<b style='color: green'>" + messageForward + "</b>";
-            messageForward = "Delete user successfully";
+            //2. cần authen
+            if (isLoggedIn == true) {
+                switch (action) {
+                    case "Search": {
+                        forwardURL = RouteController.SEARCH_USER_CONTROLLER.enumToString();
+                        break;
+                    }
+                    case "Delete": {
+                        forwardURL = RouteController.DELETE_USER_CONTROLLER.enumToString();
+                        break;
+                    }
+                    case "Update": {
+                        forwardURL = RouteController.UPDATE_USER_CONTROLLER.enumToString();
+                        break;
+                    }
+                    case "Details": {
+                        forwardURL = RouteController.USER_DETAIL_CONTROLLER.enumToString();
+                        break;
+                    }
+                }
+            }
 
         } catch (Exception ex) { //catch ALL exception
             log(ex.getMessage());
             ex = null;
-            //làm đẹp
-            messageForward = "<b style='color: red'>" + messageForward + "</b>";
-            request.setAttribute("message", messageForward);
+            //bắt để đừng crash app
         } finally {
-            out.close();
+            request.setAttribute("message", messageForward);
             RequestDispatcher rd = request.getRequestDispatcher(forwardURL);
             rd.forward(request, response);
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="Expression servletEditorFold is undefined on line 90, column 54 in Templates/JSP_Servlet/Controller.java.">
+    // <editor-fold defaultstate="collapsed" desc="Expression servletEditorFold is undefined on line 91, column 54 in Templates/JSP_Servlet/Controller.java.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

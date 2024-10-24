@@ -1,5 +1,6 @@
-package Controller.User;
+package Controller.Account;
 
+import Controller.Account.*;
 import Constant.ErrorMessage;
 import Constant.RouteController;
 import Constant.RoutePage;
@@ -48,8 +49,10 @@ public class UpdateController extends HttpServlet {
             UserError userError = new UserError();
             String userName = request.getParameter("txtUserName");
             String password = request.getParameter("txtPassword");
-            String lastName = request.getParameter("txtLastName");
+            String fullName = request.getParameter("txtFullName");
+            String accountId = request.getParameter("txtAccountId");
             String adminCheckParam = request.getParameter("chkIsAdmin");
+            String type = request.getParameter("txtType");
 
             //0.1 check userName format Uxxx, x is digit
             if (!userName.matches("U\\d{3}")) {
@@ -62,7 +65,7 @@ public class UpdateController extends HttpServlet {
                 isError = true;
             }
             //0.3 check lastName must be 5-20 characters
-            if (!lastName.matches(".{5,20}")) {
+            if (!fullName.matches(".{5,20}")) {
                 userError.setLastNameError("Last name must be 5-20 characters");
                 isError = true;
             }
@@ -78,8 +81,8 @@ public class UpdateController extends HttpServlet {
             //1.try ... bắt lỗi và ghi vào message
             try {
                 AccountDAO userDAO = new AccountDAO();
-//                Account userToUpdate = new Account(userName, password, lastName, isAdmin);
-//                userDAO.updateAcccount(userToUpdate);
+                Account userToUpdate = new Account(accountId, userName, password, fullName, type, type);
+                userDAO.updateAcccount(userToUpdate);
 
             } catch (Exception e) {
                 ErrorMessage errorMessage = ErrorMessage.valueOf(e.getMessage()); //cố gắng parse error coi có dạng ErrorMessage ko
@@ -97,14 +100,10 @@ public class UpdateController extends HttpServlet {
             //2. thành công
             forwardURL = RouteController.USER_CONTROLLER_SERVLET.enumToString() + "?action=Details&UserName" + userName;
             messageForward = "Update user successfully";
-            //2.1làm đẹp
-            messageForward = "<b style='color: green'>" + messageForward + "</b>";
 
         } catch (Exception ex) { //catch ALL exception
             log(ex.getMessage());
             ex = null;
-            //làm đẹp
-            messageForward = "<b style='color: red'>" + messageForward + "</b>";
             request.setAttribute("message", messageForward);
         } finally {
             out.close();

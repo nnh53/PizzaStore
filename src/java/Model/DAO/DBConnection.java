@@ -27,6 +27,7 @@ public class DBConnection {
         String password = "12345";
 
         String url = "jdbc:sqlserver://" + serverName + ":" + portNumber + "\\" + instance + ";databaseName=" + dbName;
+
         if (instance == null || instance.trim().isEmpty()) {
             url = "jdbc:sqlserver://" + serverName + ":" + portNumber + ";databaseName=" + dbName;
         }

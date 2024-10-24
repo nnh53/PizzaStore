@@ -104,9 +104,9 @@ public class AccountDAO {
             rs.close();
         }
         cn.close();
-        if (accountRS == null) {
-            throw new Exception(ErrorMessage.ACCOUNT_NOT_EXISTS.enumToString());
-        }
+//        if (accountRS == null) {
+//            throw new Exception(ErrorMessage.ACCOUNT_NOT_EXISTS.enumToString());
+//        }
         return accountRS;
     }//end getAccountByUserName
 
@@ -128,7 +128,7 @@ public class AccountDAO {
                 + "? ," //-- Password - nvarchar(50)\n"
                 + "? ," //-- FullName - nvarchar(50)\n"
                 + "? ," //-- Type - nvarchar(50)\n"
-                + "? ," //-- Status - nvarchar(30)\n"
+                + "?" //-- Status - nvarchar(30)\n"
                 + ");";
         af = DBConnection.getAffectedRowsFromUpdate(cn, sql, accountToAdd.getAccountID(), accountToAdd.getUserName(), accountToAdd.getPassword(), accountToAdd.getFullName(), accountToAdd.getType(), accountToAdd.getStatus()); //truyền đúng tham số theo sql ko là đi
         cn.close();

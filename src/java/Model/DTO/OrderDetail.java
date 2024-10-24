@@ -13,13 +13,13 @@ public class OrderDetail {
 
     private String orderID; //UNIQUE
     private String productID;
+    private int quantity;
     private String unitPrice;
-    private String quantity;
 
     public OrderDetail() {
     }
 
-    public OrderDetail(String orderID, String productID, String unitPrice, String quantity) {
+    public OrderDetail(String orderID, String productID, int quantity, String unitPrice) {
         this.orderID = orderID;
         this.productID = productID;
         this.unitPrice = unitPrice;
@@ -50,11 +50,11 @@ public class OrderDetail {
         this.unitPrice = unitPrice;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 

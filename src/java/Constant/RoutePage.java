@@ -14,7 +14,7 @@ public enum RoutePage {
     LOGIN_PAGE("Login.jsp"),
     MESSAGE_PAGE("DisplayMessage.jsp"),
     NOT_FOUND_PAGE("NotFound.jsp"),
-    CREATE_USER_PAGE("CreateUser.jsp"),
+    CREATE_USER_PAGE("CreateAccount.jsp"),
     USER_DETAIL_PAGE("UserDetails.jsp");
 
     private final String message;

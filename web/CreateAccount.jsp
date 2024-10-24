@@ -8,7 +8,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
-    String userController = RouteController.USER_CONTROLLER_SERVLET.enumToString();
+//    String userController = RouteController.USER_CONTROLLER_SERVLET.enumToString();
+    String createAccountController = RouteController.CREATE_USER_CONTROLLER.enumToString();
     String message = (String) request.getAttribute("message");
     String notiColor = "";
     if (message != null) {
@@ -31,24 +32,25 @@
             <p style="color: <%= notiColor%>">${message}<p/>
         </c:if>
 
-        <form action="<%= userController%>" method="POST">
+        <form action="<%= createAccountController%>" method="POST">
             <c:set var="error" value="${requestScope.ErrorDetail}"/>
             <!--UserName-->
-            UserName <input type="text" name="txtUserName" value="Uxxx" /> <br/>
+            UserName <input type="text" name="txtUserName" value="" /> <br/>
             <c:if test="${not empty error.userNameError}">
                 <p style="color: red">${error.userNameError}<p/>
             </c:if>
             <!--Password-->
-            Password <input type="text" name="txtPassword" value="Enter Password" /> <br/>
+            Password <input type="text" name="txtPassword" value="" /> <br/>
             <c:if test="${not empty error.passwordError}">
                 <p style="color: red">${error.passwordError}<p/>
             </c:if>
-            <!--LastName-->
-            LastName <input type="text" name="txtLastName" value="Enter LastName" /> <br/>
+            <!--fullName-->
+            LastName <input type="text" name="txtFullName" value="" /> <br/>
             <c:if test="${not empty error.lastNameError}">
                 <p style="color: red">${error.lastNameError}<p/>
             </c:if>
-            <input type="checkbox" name="chkIsAdmin" disabled="true"/>isAdmim<br/>
+            <!--type-->
+            <input type="checkbox" name="chkIsStaff" disabled="true"/>isStaff<br/>
 
             <input type="submit" name="action" value="Create"/>
         </form>

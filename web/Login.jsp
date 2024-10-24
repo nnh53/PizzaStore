@@ -69,10 +69,10 @@
                 <p>Enter your details below</p>
                 <div>
                     <label for="exampleInputEmail1" class="form-label mt-4"
-                           >Email address</label
+                           >UserName</label
                     >
                     <input
-                        type="email"
+                        type="text  "
                         class="form-control"
                         name="txtUserName"
                         id="exampleInputEmail1"
